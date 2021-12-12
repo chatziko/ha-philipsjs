@@ -882,6 +882,12 @@ class PhilipsTV(object):
             self.powerstate = cast(str, r["powerstate"])
         else:
             self.powerstate = None
+
+        # Workaround for TVs reporting Standby when Netflix is on
+        # Just consider the TV as On when it is alive.
+        if self.powerstate == 'Standby':
+            self.powerstate = 'On'
+
         return r
 
     async def setPowerState(self, state):
